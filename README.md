@@ -31,3 +31,5 @@ Script Utility goals/asperations
 * output logging
 * folder scanning
 * file conversion
+* comply with PEP 8
+
