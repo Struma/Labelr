@@ -7,6 +7,9 @@ Labelr is an interactive script utility for batch authoring scientific images fo
 </p>
 <p align="center"> Fig 1. The above images are generated from this script. </p>
 
+AOFP Image Labeling Guidlines
+------
+
 The file that outlines the AOFP standards are available -> [here](https://github.com/Struma/Labelr/blob/master/Live%20plant%20photo%20instructions%20for%20the%20Atlas.doc) <- and are summarized as follows.
 
 * Images must be 72ppi Jpegs
@@ -19,3 +22,12 @@ The file that outlines the AOFP standards are available -> [here](https://github
 * Taxon name ex.(Genus species) in 24pt font
 * Author name ex.(Photo by John Doe) in 14pt font
 * Name of final image file formatted as ex.(genus_species.jpg) in snake case
+
+Script Utility goals/asperations
+------
+* Interactive or batch processing power
+* Support for Information Interchange Model (IPTC) Metada labeling
+* Automatic archiving
+* output logging
+* folder scanning
+* file conversion
