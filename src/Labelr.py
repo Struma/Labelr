@@ -61,7 +61,7 @@ Labelr.py --help for help")
     for img in imgs:
         size_img(img).save(args[1] + '/' + os.path.basename(img).split('.')[0] + ".jpg")
 
-
+#--------------------------------------------------------------------------
 # Definitons for label creation
 #
 def default():
@@ -87,7 +87,8 @@ def label_maker(case = 0):
     func = switcher.get(case, "nothing")
     # Execute the function
     print(func())
-
+#
+#-------------------------------------------------------------------------
 
 def size_img(imPath, ar = "AUTO"):
     """ Returns a resized image based on Aspect Ratio"""
@@ -175,6 +176,65 @@ def get_imgs(path):
             raise RuntimeError("Invalid source image")
     else:
         raise RuntimeError("No valid source image or source directory specified")
+
+def draw_title(image_obj,
+               title_string,
+               subtitl_str="none",
+               fontsize=24,
+               subfontsize=14,
+               t_italicized=True,
+               s_italicized=True,
+               fill_color=(15,15,15,225),
+               text_color=(255,255,0,255),
+               padding=4):
+
+    pencil = ImageDraw.Draw(image_obj) # The pencil draws labels/recs
+
+
+    if (t_italicized == True): # handles title (required)
+        title_font = ImageFont.truetype("../fonts/ariali.ttf", fontsize)
+    else:
+        title_font = ImageFont.truetype("../fonts/arial.ttf", fontsize)
+    xtent, ytent = title_font.getsize(title_string)
+
+    if subtitl_str == "none": # handles subtitle (optional)
+        xtent2, ytent2 = (0,0)
+    else:
+        if (s_italicized == True):
+            subtitle_font = ImageFont.truetype("../fonts/ariali.ttf", subfontsize)
+        else:
+            subtitle_font = ImageFont.truetype("../fonts/arial.ttf", subfontsize)
+
+        xtent2, ytent2 = subtitle_font.getsize(subtitl_str)
+
+
+    if (xtent > xtent2): # draws the first set of rectangles
+        pencil.rectangle([(0,0), (xtent + (2*padding), ytent)],
+                         fill=fill_color)
+    else:
+        pencil.rectangle([(0,0), (xtent2 + (2*padding), ytent)],
+                         fill=fill_color)
+
+
+    if subtitl_str != "none":
+        if (xtent > xtent2): # draws the subtitle set of rectangles (optnl)
+            pencil.rectangle([(0, ytent), (xtent + (2*padding), ytent + ytent2)],
+                            fill= fill_color)
+        else:
+            pencil.rectangle([(0, ytent), (xtent2 + (2*padding), ytent + ytent2)],
+                            fill= fill_color)
+
+    pencil.text((padding, 0), title_string, font=title_font, fill=text_color)
+
+    if subtitl_str != "none":
+        pencil.text((padding, ytent), subtitl_str, font=subtitle_font, fill=text_color)
+
+    del pencil
+    return image_obj
+
+
+
+
 
 
 if __name__ == '__main__':
