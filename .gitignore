@@ -1,1 +1,5 @@
 *.swp
+*.swo
+*.pyc
+src/.IPTC.py
+src/IPTC.py
