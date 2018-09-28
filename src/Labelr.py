@@ -97,6 +97,16 @@ def prompt_auth():
     author = input("Name of Systematician\n--> ")
     return author
 
+def IPTC_parse(IPTC_path):
+    # some file with the proper fields
+    IPTC_file = open(IPTC_path, "r")
+    IPTC_list = IPTC_file.readlines()
+    IPTC_tuple = ("description", "digitizer", "origin", "genus", "email",
+                      "barcode", "species", "herb_url", "AOFP_url")
+    IPTC_dictionary = { IPTC_tuple[x]:IPTC_list[x] for x in
+                      range(len(IPTC_tuple)) }
+    return IPTC_dictionary
+
 def IPTC_Writer(image_flname,
                 descrip = "NA",
                 digitizer = "NA",

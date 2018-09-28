@@ -3,3 +3,6 @@
 *.pyc
 src/.IPTC.py
 src/IPTC.py
+__pycache__
+src/IPTC_test.test
+src/__pycache__/
