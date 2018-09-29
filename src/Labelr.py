@@ -24,19 +24,9 @@ def main():
 
     # Option Parser 
     #
-    usage = "usage: %prog [options] <input> <output_dir>"
+    usage = "usage: %prog [options] <input> <output_dir>\n\nWhere <input> is a file or directory containing images"
 
     parser = OptionParser(usage=usage)
-
-
-    parser.add_option("-f", "--file", action="store",type="string", dest="filename",
-            help="write report to FILE", metavar="FILENAME")
-
-
-    parser.add_option("-q", "--quiet",
-            action="store_false", dest="verbose",
-            default=True,
-            help="don't print status messages to stdout")
 
 
     parser.add_option("-A", "--author",        # AUTHOR input
@@ -44,14 +34,25 @@ def main():
             default=False,
             help="Prompt the user for author name")
 
+    parser.add_option("-B", "--barcode",        # barcode splitter
+            action="store", type="string", dest="barcode_re",
+            help="splits barcode prepended to filenames ex. <barcode\ GenSpe.png>")
 
 
-    parser.add_option("-d", "--details", action="store",type="string",
-            dest="details_file",
-            help="Details for labeling", metavar="detail_file")
+    parser.add_option("-d", "--deets", action="store",type="string",
+            dest="detail_file",
+            help="Pull IPTC details from <detail> file", metavar="detail")
 
 
     (options, args) = parser.parse_args()
+
+    # Check if IPTC details will be written
+    #
+    if options.detail_file != None:
+        try:
+            IPTC_DETAILS = IPTC_parse(options.detail_file)
+        except FileNot :
+            raise RuntimeError("Problem with IPTC detail path, couldn't load")
 
 
     # make sure that the OUTPUT exist, create folder if not
@@ -84,14 +85,25 @@ Labelr.py --help for help")
         image_file = size_img(img)
 
         if options.auth:
-            # draw subtitle
-            image_file = draw_title(image_file,
-                                    os.path.basename(img).split('.')[0],
-                                    AUTHOR)
+            if options.barcode_re != None:
+                barcode, filenm = barcode_parse(os.path.basename(img),
+                                                options.barcode_re,
+                                                True)
+                image_file = draw_title(image_file, filenm, AUTHOR)
+            else:
+                image_file = draw_title(image_file,
+                                        os.path.basename(img).split('.')[0],
+                                        AUTHOR)
         else:
-            image_file = draw_title(image_file, os.path.basename(img).split('.')[0])
-        image_file.show()
+            if options.barcode_re != None:
+                barcode, filenm = barcode_parse(os.path.basename(img),
+                                                options.barcode_re,
+                                                True)
+                image_file = draw_title(image_file, filenm)
+            else:
+                image_file = draw_title(image_file, os.path.basename(img).split('.')[0])
 
+        image_file.show()
 
 def prompt_auth():
     author = input("Name of Systematician\n--> ")
@@ -101,49 +113,36 @@ def IPTC_parse(IPTC_path):
     # some file with the proper fields
     IPTC_file = open(IPTC_path, "r")
     IPTC_list = IPTC_file.readlines()
-    IPTC_tuple = ("description", "digitizer", "origin", "genus", "email",
-                      "barcode", "species", "herb_url", "AOFP_url")
-    IPTC_dictionary = { IPTC_tuple[x]:IPTC_list[x] for x in
+    IPTC_tuple = ("description", "digitizer", "origin", "genus", "species",
+                 "email", "barcode", "src_url", "Dbase_url")
+    IPTC_dictionary = { IPTC_tuple[x]:IPTC_list[x].split(": ")[1].strip("\n") for x in
                       range(len(IPTC_tuple)) }
     return IPTC_dictionary
 
-def IPTC_Writer(image_flname,
-                descrip = "NA",
-                digitizer = "NA",
-                origin = "NA",
-                gen = "NA",
-                email = "NA",
-                barcode = "NA",
-                spec = "NA",
-                herb_url = "NA",
-                AOFP_url = "NA"):
+def IPTC_Writer(image_flname, IPTC_dic):
 
     j = pyexiv2.ImageMetadata(image_flname)
     j.read()
-    j['Iptc.Application2.Subject'] = ["Description: " + descrip, "Origin: " + origin, "Genus: " + gen,
-     "Species: " + spec, "Barcode: " + barcode , herb_url, "AOFP: " + AOFP_url]
+    j['Iptc.Application2.Subject'] = ["Description: " + IPTC_dic["description"],
+                                     "Origin: " + IPTC_dic["origin"], "Genus: "
+                                     + IPTC_dic["genus"], "Species: " +
+                                     IPTC_dic["species"], "Barcode: " +
+                                     IPTC_dic["barcode"], "Source url: " +
+                                     IPTC_dic["src_url"], "Database url: " +
+                                     IPTC_dic["Dbase_url"]]
+
     j['Iptc.Application2.DateCreated'] = [datetime.date.today()]
-    j['Iptc.Application2.Byline'] = [digitizer]
-    j['Iptc.Application2.Headline'] = ["FSU Herbarium Specimen: Plant Seeds- Genus: " + gen + " Spec: " + spec]
-    j['Iptc.Application2.Contact'] = [email]
+
+    j['Iptc.Application2.Byline'] = [IPTC_dic["digitizer"]]
+
+    j['Iptc.Application2.Headline'] = ["Scientific image\nGenus: " +
+                                        IPTC_dic["genus"] +" \n" +
+                                        "Spec: "+ IPTC_dic["species"]]
+
+    j['Iptc.Application2.Contact'] = [IPTC_dic["email"]]
     j.write()
-'''
-program_description = "Project; SEEDY project by Daniel Dominguez, Open Source python tools for quick digitizing and authoring of HQ Herbarium seed images."
-digitiz ="Digitizer: Daniel Dominguez"
 
-herbarium_origin = "Godfrey Herbarium FSU"
-herbarium_barcode = "barcode: " + str(12381237123)
-genus_species = "genus_species: "
-genus = "genus: "
-species = "species "
-Herbarium_Link = "url"
-AOFP_link = "other url"
-Contact = "contacnt@email.com"
-img_title = 'Agalinis tenuifolia_1.jpg'
-
-IPTC_Writer(program_description, digitizer, date_digitized, herbarium_origin, genus, herbarium_barcode, species, Herbarium_Link, AOFP_link)
-
-
+''' Helpful info on the IPTC standard labels
 	Iptc.Application2.Subject String No Yes  13  236   Will hold the info
     Iptc.Application2.ReleaseDate Date                8
     Iptc.Application2.DateCreated Date No No 8 8
@@ -152,21 +151,24 @@ IPTC_Writer(program_description, digitizer, date_digitized, herbarium_origin, ge
     Iptc.Application2.Headline  String  No  No  0 256 synopsis of content
     Iptc.Application2.Contact   string  128
     Iptc.Application2.Caption String No  No  0 2000
-
 '''
 
 
-def barcode_parse( s_string, code_pattern = "", regex= None):
+def barcode_parse(in_string, code_pattern = "", regex= None):
     # take a regex as input and ouput the groups
-    # can be used to clean and split file name
-    DEFAULT_REGEX = r""
+    # parses barcode and gen/spec from flname ex. "123 Genus spec.png"
+    DEFAULT_REGEX = r"([\d\w]*) (.+(?=\.))"
 
     if regex == None:
-        pattern = re.compile(DEFAULT_REGEX)
-        barcode, filename = pattern.match(s_string)
+        pattern = re.compile(DEFAULT_REGEX, re.IGNORECASE)
+        match =  pattern.search(in_string)
+        barcode = match.group(1)
+        filename = match.group(2)
     else:
-        pattern = re.compile(code_pattern)
-        barcode, filename = pattern.match(s_string)
+        pattern = re.compile(code_pattern, re.IGNORECASE)
+        match = pattern.match(in_string)
+        barcode = match.group(1)
+        filename = match.group(2)
 
     return barcode, filename
 

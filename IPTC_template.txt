@@ -1,0 +1,10 @@
+Description: This is a test file template
+Author/digitizer: Daniel Dominguez
+Orgin/place: Tallahassee Florida
+Genus: Homo
+Species: sapien
+Email: djd10d@gtfo.com
+Barcode: 11232
+Herbarium Url: NA
+AOFP Url: NA
+
