@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 
-"""labelr by Julio Dominguez
-is a script utility for authoring scientific images. Labelr is based off
-the image guidlines set by the Atlas Of Florida Plants online database.
+"""labelr
+
+Labelr is a platform agnostic script for authoring scientific images.
+
+Labelr is based off the image guidlines set by the Atlas Of Florida
+Plants online database.
 
 This script aims to be both a batch processor and an interactive utility for
-use outside of biological systematics.
+use within biological systematics.
+
+Execute "labelr --help" for usage information.
 """
+
+__author__ = "Julio Dominguez"
+__version__ = "2.0.0"
+__license__ = "GNUv3"
+
 
 from optparse import OptionParser
 import os
@@ -14,8 +24,6 @@ from PIL import Image, ImageDraw, ImageFont
 import re
 import pyexiv2
 import datetime
-
-
 
 
 def main():
@@ -38,11 +46,9 @@ def main():
             action="store", type="string", dest="barcode_re",
             help="splits barcode prepended to filenames ex. <barcode\ GenSpe.png>")
 
-
     parser.add_option("-d", "--deets", action="store",type="string",
             dest="detail_file",
             help="Pull IPTC details from <detail> file", metavar="detail")
-
 
     (options, args) = parser.parse_args()
 
@@ -51,7 +57,7 @@ def main():
     if options.detail_file != None:
         try:
             IPTC_DETAILS = IPTC_parse(options.detail_file)
-        except FileNot :
+        except FileNotFoundError :
             raise RuntimeError("Problem with IPTC detail path, couldn't load")
 
 
@@ -74,10 +80,12 @@ def main():
         raise RuntimeError("No source image or source directory specified:\
 Labelr.py --help for help")
 
+
     # Start going through the options
     #
     if options.auth:
         AUTHOR = prompt_auth() #Author will be treated as a constant once set.
+
 
     # save resized images into new folder
     #
@@ -105,9 +113,11 @@ Labelr.py --help for help")
 
         image_file.show()
 
+
 def prompt_auth():
     author = input("Name of Systematician\n--> ")
     return author
+
 
 def IPTC_parse(IPTC_path):
     # some file with the proper fields
@@ -118,6 +128,7 @@ def IPTC_parse(IPTC_path):
     IPTC_dictionary = { IPTC_tuple[x]:IPTC_list[x].split(": ")[1].strip("\n") for x in
                       range(len(IPTC_tuple)) }
     return IPTC_dictionary
+
 
 def IPTC_Writer(image_flname, IPTC_dic):
 
@@ -231,6 +242,7 @@ def size_img(imPath, ar = "AUTO"):
     elif ar == "portrait":
         return portrait(imPath)
 
+
 def get_imgs(path):
     """ returns list of file paths to images that match the following formats
     or raises an error """
@@ -259,6 +271,7 @@ def get_imgs(path):
     else:
         raise RuntimeError("No valid source image or source directory specified")
 
+
 def draw_title(image_obj,
                title_string,
                subtitl_str="none",
@@ -274,18 +287,18 @@ def draw_title(image_obj,
 
 
     if (t_italicized == True): # handles title (required)
-        title_font = ImageFont.truetype("../fonts/ariali.ttf", fontsize)
+        title_font = ImageFont.truetype(os.path.join("fonts", "ariali.ttf"), fontsize)
     else:
-        title_font = ImageFont.truetype("../fonts/arial.ttf", fontsize)
+        title_font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), fontsize)
     xtent, ytent = title_font.getsize(title_string)
 
     if subtitl_str == "none": # handles subtitle (optional)
         xtent2, ytent2 = (0,0)
     else:
         if (s_italicized == True):
-            subtitle_font = ImageFont.truetype("../fonts/ariali.ttf", subfontsize)
+            subtitle_font = ImageFont.truetype(os.path.join("fonts", "ariali.ttf"), subfontsize)
         else:
-            subtitle_font = ImageFont.truetype("../fonts/arial.ttf", subfontsize)
+            subtitle_font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"),subfontsize)
 
         xtent2, ytent2 = subtitle_font.getsize(subtitl_str)
 

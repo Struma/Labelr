@@ -2,7 +2,7 @@
 Labelr is an interactive script utility for batch authoring scientific images for upload to databases. The standard utility is modeled off of the Atlas of Florida Plants image standards.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Struma/Labelr/master/Seed_example.png" alt="example_imgs"/>
+  <img src="https://raw.githubusercontent.com/Struma/Labelr/master/ref/seed_example.png" alt="example_imgs"/>
   
 </p>
 <p align="center"> Fig 1. The above images are generated from this script. </p>
@@ -10,7 +10,8 @@ Labelr is an interactive script utility for batch authoring scientific images fo
 AOFP Image Labeling Guidlines
 ------
 
-The file that outlines the AOFP standards are available -> [here](https://github.com/Struma/Labelr/blob/master/Live%20plant%20photo%20instructions%20for%20the%20Atlas.doc) <- and are summarized as follows.
+The file that outlines the AOFP standards are available ->
+[here](https://github.com/Struma/Labelr/blob/master/ref/Live%20plant%20photo%20instructions%20for%20the%20Atlas.doc) <- and are summarized as follows.
 
 * Images must be 72ppi Jpegs
 * Aspect Ratios must conform to these pixel dimesions
