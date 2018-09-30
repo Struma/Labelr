@@ -7,11 +7,11 @@ Labelr is an interactive script utility for batch authoring scientific images fo
 </p>
 <p align="center"> Fig 1. The above images are generated from this script. </p>
 
-How to install/use
+How to install
 ------
-An install script does not yet exist. It will be a bash file that moves this folder to a hidden folder in the home directory to toand a symbolic link to the script in $PATH.
 
-
+1. download this directory `git pull https://github.com/Struma/Labelr.git` this directory
+2.  
  
 
 
