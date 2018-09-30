@@ -24,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 import re
 import pyexiv2
 import datetime
+import sys
 
 
 def main():
@@ -285,20 +286,21 @@ def draw_title(image_obj,
 
     pencil = ImageDraw.Draw(image_obj) # The pencil draws labels/recs
 
+    script_path = get_script_path()
 
     if (t_italicized == True): # handles title (required)
-        title_font = ImageFont.truetype(os.path.join("fonts", "ariali.ttf"), fontsize)
+        title_font = ImageFont.truetype(os.path.join(script_path ,"fonts", "ariali.ttf"), fontsize)
     else:
-        title_font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), fontsize)
+        title_font = ImageFont.truetype(os.path.join(script_path, "fonts", "arial.ttf"), fontsize)
     xtent, ytent = title_font.getsize(title_string)
 
     if subtitl_str == "none": # handles subtitle (optional)
         xtent2, ytent2 = (0,0)
     else:
         if (s_italicized == True):
-            subtitle_font = ImageFont.truetype(os.path.join("fonts", "ariali.ttf"), subfontsize)
+            subtitle_font = ImageFont.truetype(os.path.join(script_path, "fonts", "ariali.ttf"), subfontsize)
         else:
-            subtitle_font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"),subfontsize)
+            subtitle_font = ImageFont.truetype(os.path.join(script_path, "fonts", "arial.ttf"),subfontsize)
 
         xtent2, ytent2 = subtitle_font.getsize(subtitl_str)
 
@@ -329,6 +331,8 @@ def draw_title(image_obj,
     del pencil
     return image_obj
 
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 if __name__ == '__main__':
     main()
