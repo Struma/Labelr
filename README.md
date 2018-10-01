@@ -9,8 +9,9 @@ Labelr is an interactive script utility for batch authoring scientific images fo
 
 How to install
 ------
+Install with Pip! 
 
-1. download this directory `git pull https://github.com/Struma/Labelr.git` this directory
+1. download this directory `git clone https://github.com/Struma/Labelr.git ~/.labelr` this directory
 2.  
  
 
