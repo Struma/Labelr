@@ -70,7 +70,7 @@ def main():
     # make sure that the OUTPUT exist, create folder if not
     #
     try:
-        if args[1] is None:
+        if len(args) < 2:
             pass
         elif (os.path.exists(args[1]) == False):
             os.mkdir(args[1])
