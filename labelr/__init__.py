@@ -120,7 +120,8 @@ Labelr.py --help for help")
         if options.img_preview:
             image_file.show()
         else:
-            image_file.save(os.path.join(args[1], os.path.basename(img)), "JPEG")
+            image_file.save(os.path.join(args[1],
+                            os.path.basename(img).split('.')[0] + ".jpg"), "JPEG")
 
 
 def prompt_auth():
