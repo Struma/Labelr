@@ -1,2 +1,1 @@
-include fonts/ariali.ttf
-inlcude fonts/arial.ttf
+include labelr/fonts/*.ttf
