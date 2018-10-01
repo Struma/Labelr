@@ -117,9 +117,9 @@ Labelr.py --help for help")
             else:
                 image_file = draw_title(image_file, os.path.basename(img).split('.')[0])
 
-	if img_preview:
+    if img_preview:
         image_file.show()
-	else:
+    else:
         image_file.save(os.path.join(args[1], os.path.basename(img)), "JPG")
 
 
