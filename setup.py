@@ -12,6 +12,6 @@ setup(name='labelr',
           'Pillow',
           'py3exiv2'
       ],
-      scripts=['bin/labelr-tool'],
+      scripts=['bin/labelr'],
       include_package_data=True,
       zip_safe=False)
