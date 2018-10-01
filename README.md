@@ -11,8 +11,21 @@ How to install
 ------
 Install with Pip! 
 
-1. download this directory `git clone https://github.com/Struma/Labelr.git ~/.labelr` this directory
-2.  
+Download this directory to somewhere sensible and get inside.
+
+`git clone https://github.com/Struma/Labelr.git ~/.labelr` 
+
+`cd ~/.labelr`
+
+Install with pip3
+
+`pip3 install .`
+  
+**Debian/Ubuntu** Pip puts the scripts into `~/.local/bin/` on these machines, but by default you cannot access it readily beacuse `~/.local/bin/` is not in PATH.
+
+I set the variable in my `~/.bashrc` file via
+
+`echo "export PATH=$PATH:$HOME/.local/bin/" >> ~/.bashrc`
  
 
 
