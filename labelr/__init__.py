@@ -28,7 +28,6 @@ import sys
 
 
 def main():
-    print(__file__)
     """Handles the parser and calls module functions"""
     imgs = [] # The inital image path list
 
@@ -39,16 +38,21 @@ def main():
     parser = OptionParser(usage=usage)
 
 
-    parser.add_option("-A", "--author",        # AUTHOR input
+    parser.add_option("-a", "--author",        # AUTHOR input
             action="store_true", dest="auth",
             default=False,
             help="Prompt the user for author name")
 
-    parser.add_option("-B", "--barcode",        # barcode splitter
+    parser.add_option("-p", "--preview",
+            action="store_true", dest="img_preview",
+            default=False,
+            help="Show each image as it renders")
+
+    parser.add_option("-b", "--barcode",        # barcode splitter
             action="store", type="string", dest="barcode_re",
             help="splits barcode prepended to filenames ex. <barcode\ GenSpe.png>")
 
-    parser.add_option("-d", "--deets", action="store",type="string",
+    parser.add_option("-d", "--details", action="store",type="string",
             dest="detail_file",
             help="Pull IPTC details from <detail> file", metavar="detail")
 
@@ -113,7 +117,10 @@ Labelr.py --help for help")
             else:
                 image_file = draw_title(image_file, os.path.basename(img).split('.')[0])
 
+	if img_preview:
         image_file.show()
+	else:
+        image_file.save(os.path.join(args[1], os.path.basename(img)), "JPG")
 
 
 def prompt_auth():
@@ -332,8 +339,6 @@ def draw_title(image_obj,
     del pencil
     return image_obj
 
-def get_script_path():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 if __name__ == '__main__':
     main()
