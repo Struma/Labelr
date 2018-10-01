@@ -294,8 +294,6 @@ def draw_title(image_obj,
 
     pencil = ImageDraw.Draw(image_obj) # The pencil draws labels/recs
 
-    script_path = get_script_path()
-
     if (t_italicized == True): # handles title (required)
         title_font = ImageFont.truetype(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts", "ariali.ttf"), fontsize)
     else:
