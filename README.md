@@ -2,6 +2,7 @@
 Labelr is an interactive script utility for batch authoring scientific images for upload to databases. The standard utility is modeled off of the Atlas of Florida Plants image standards.
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/Struma/Labelr/master/ref/CLI_example.jpg" alt="example_imgs"/>
   <img src="https://raw.githubusercontent.com/Struma/Labelr/master/ref/Seed_example.png" alt="example_imgs"/>
   
 </p>
